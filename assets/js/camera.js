@@ -1,3 +1,4 @@
+
 const scenes=[
   "assets/img/camera/scene_1.png",
   "assets/img/camera/scene_2.png",
@@ -9,5 +10,8 @@ const scenes=[
 let idx=0;
 setInterval(()=>{
   idx=(idx+1)%scenes.length;
-  document.getElementById("cameraFeed").src=scenes[idx];
-},6000);
+  let l=document.getElementById("cctvLobby");
+  if(l) l.src=scenes[idx];
+  let v=document.getElementById("cctvVan");
+  if(v) v.src=scenes[idx];
+},5000);
