@@ -1,1 +1,1 @@
-console.log("lobby placeholder");
+console.log("Lobby ready.");
