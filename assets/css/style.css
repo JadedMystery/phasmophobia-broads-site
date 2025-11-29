@@ -1,0 +1,31 @@
+
+body { margin:0; background:#000; font-family: monospace; color:#0f0; }
+.van-container { display:flex; gap:10px; padding:20px; }
+.van-left, .van-center, .van-right { display:flex; flex-direction:column; gap:10px; }
+.poster { width:200px; height:150px; background:#111; border:2px solid #333; }
+.monitor { width:300px; height:200px; }
+.crt {
+  background:#020;
+  border:4px solid #030;
+  box-shadow:0 0 20px #0f0;
+  padding:10px;
+  color:#0f0;
+  font-size:14px;
+  position:relative;
+  overflow:hidden;
+}
+.crt::after {
+  content:"";
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  background: repeating-linear-gradient(
+    rgba(0,255,0,0.03), rgba(0,255,0,0.03) 2px,
+    transparent 2px, transparent 4px
+  );
+  pointer-events:none;
+}
+.tablet { width:400px; margin:40px auto; padding:20px; background:#111; border:3px solid #333; }
+.tablet-screen { height:300px; overflow:auto; }
+.input-row { display:flex; gap:5px; margin-top:10px; }
+input { flex:1; }
+.enter-btn { padding:10px; background:#030; color:#0f0; text-decoration:none; text-align:center; }
