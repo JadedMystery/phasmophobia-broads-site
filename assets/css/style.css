@@ -750,3 +750,23 @@ body {
 .chat-message.ghost .chat-name {
   color: #22c55e;
 }
+/* Fix spacing between monitor and chat */
+.van-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    gap: 2rem !important;
+}
+
+/* Left side van monitor should take ~65% */
+.monitor-shell {
+    width: 65% !important;
+}
+
+/* Right chat panel should stay on the side */
+.van-chat {
+    width: 30% !important;
+    min-width: 340px !important;
+}
