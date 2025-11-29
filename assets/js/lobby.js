@@ -17,6 +17,8 @@ const tips = [
   "Tip: If the door closes by itself, that’s your sign to leave."
 ];
 
+let avatarDataUrl = ""; // ephemeral for this browser only
+
 function setRandomTip() {
   const tipEl = document.getElementById("ghost-tip");
   if (!tipEl) return;
@@ -35,34 +37,72 @@ function generateRoomCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
+function initialsFromName(name) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) {
+    return parts[0].substring(0,2).toUpperCase();
+  }
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
 function goToChat(roomCode, playerName) {
   const params = new URLSearchParams();
   params.set("room", roomCode);
   params.set("name", playerName);
+  if (avatarDataUrl) {
+    // pass small avatar via URL; for big files this may be truncated but okay for simple use
+    params.set("avatar", avatarDataUrl);
+  }
   window.location.href = "chat.html?" + params.toString();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // rotate tips during loading screen
+  // rotate tips and fake loading
   setRandomTip();
   const tipInterval = setInterval(setRandomTip, 5000);
-
-  // fake loading
   setTimeout(() => {
     clearInterval(tipInterval);
     showLobby();
-  }, 4000);
+  }, 3500);
 
+  const nameInput = document.getElementById("playerName");
+  const roomInput = document.getElementById("roomCode");
   const createBtn = document.getElementById("createLobbyBtn");
   const joinBtn = document.getElementById("joinLobbyBtn");
   const randomBtn = document.getElementById("randomCodeBtn");
-  const nameInput = document.getElementById("playerName");
-  const roomInput = document.getElementById("roomCode");
+  const avatarFile = document.getElementById("avatarFile");
+  const avatarPreview = document.getElementById("avatarPreview");
+  const avatarInitials = document.getElementById("avatarInitials");
+  const avatarNameLabel = document.getElementById("avatarNameLabel");
 
-  function getValues() {
-    let name = (nameInput && nameInput.value.trim()) || "Investigator";
-    let room = (roomInput && roomInput.value.trim().toUpperCase()) || "";
-    return { name, room };
+  function syncAvatarName() {
+    const name = (nameInput && nameInput.value.trim()) || "Investigator";
+    if (avatarNameLabel) avatarNameLabel.textContent = name;
+    if (!avatarDataUrl && avatarInitials) {
+      avatarInitials.textContent = initialsFromName(name);
+    }
+  }
+
+  if (nameInput) {
+    nameInput.addEventListener("input", syncAvatarName);
+  }
+  syncAvatarName();
+
+  if (avatarFile && avatarPreview) {
+    avatarFile.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        avatarDataUrl = reader.result;
+        // show image in circle
+        avatarPreview.innerHTML = "";
+        const img = document.createElement("img");
+        img.src = avatarDataUrl;
+        avatarPreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   if (randomBtn && roomInput) {
@@ -74,14 +114,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function getValues() {
+    const name = (nameInput && nameInput.value.trim()) || "Investigator";
+    const room = (roomInput && roomInput.value.trim().toUpperCase()) || "";
+    return { name, room };
+  }
+
   if (createBtn) {
     createBtn.addEventListener("click", () => {
       const vals = getValues();
-      if (!vals.room) {
-        vals.room = generateRoomCode();
-        if (roomInput) roomInput.value = vals.room;
+      let room = vals.room;
+      if (!room) {
+        room = generateRoomCode();
+        if (roomInput) roomInput.value = room;
       }
-      goToChat(vals.room, vals.name);
+      goToChat(room, vals.name);
     });
   }
 

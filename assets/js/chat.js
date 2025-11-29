@@ -3,15 +3,36 @@ function getParams() {
   const params = new URLSearchParams(window.location.search);
   return {
     room: params.get("room") || "BROADSVAN",
-    name: params.get("name") || "Investigator"
+    name: params.get("name") || "Investigator",
+    avatar: params.get("avatar") || ""
   };
 }
 
-function initJitsi(room, name) {
+function applyAvatarOverlay(name, avatar) {
+  const label = document.getElementById("monitorAvatarLabel");
+  const initialsEl = document.getElementById("monitorAvatarInitials");
+  const circle = document.getElementById("monitorAvatarCircle");
+
+  if (label) label.textContent = name;
+
+  if (avatar && circle) {
+    circle.innerHTML = "";
+    const img = document.createElement("img");
+    img.src = avatar;
+    circle.appendChild(img);
+  } else if (initialsEl) {
+    const parts = name.trim().split(/\s+/);
+    let initials = "";
+    if (parts.length === 1) initials = parts[0].substring(0,2).toUpperCase();
+    else initials = (parts[0][0] + parts[1][0]).toUpperCase();
+    initialsEl.textContent = initials;
+  }
+}
+
+function initJitsi(room, name, avatar) {
   if (typeof JitsiMeetExternalAPI === "undefined") {
-    console.error("Jitsi external API not loaded.");
     const status = document.getElementById("monitor-status");
-    if (status) status.textContent = "ERROR: JITSI NOT LOADED";
+    if (status) status.textContent = "ERROR: Jitsi API not loaded";
     return;
   }
 
@@ -24,8 +45,10 @@ function initJitsi(room, name) {
     parentNode: container,
     userInfo: {
       displayName: name
+      // avatarURL: avatar || undefined  // data URLs may or may not be supported; overlay handles visuals
     },
     configOverwrite: {
+      prejoinPageEnabled: false,
       disableDeepLinking: true
     },
     interfaceConfigOverwrite: {
@@ -42,7 +65,7 @@ function initJitsi(room, name) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const { room, name } = getParams();
+  const { room, name, avatar } = getParams();
 
   const roomLabel = document.getElementById("room-label");
   const nameLabel = document.getElementById("player-label");
@@ -56,5 +79,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  initJitsi(room, name);
+  applyAvatarOverlay(name, avatar);
+
+  // small delay so layout settles before embedding Jitsi
+  setTimeout(() => {
+    initJitsi(room, name, avatar);
+  }, 400);
 });

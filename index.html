@@ -21,10 +21,29 @@
 
   <div id="lobby-screen" class="screen lobby-screen hidden">
     <div class="van-wrapper">
-      <div>
-        <div class="van-wall-title">Case Files &amp; Chaos</div>
-        <div class="photo-grid">
-          <div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 01_35_48 PM_1764099378740.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_40_24 PM_1764191715699.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_58_04 PM_1764191759271.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 07_27_30 PM_1764191734113.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div>
+      <div class="van-top-row">
+        <div>
+          <div class="van-wall-title">Case Files &amp; Chaos</div>
+          <div class="photo-grid">
+            <div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 01_35_48 PM_1764099378740.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_40_24 PM_1764191715699.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_58_04 PM_1764191759271.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 07_27_30 PM_1764191734113.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div>
+          </div>
+        </div>
+
+        <div class="avatar-card">
+          <div class="avatar-title">Current Hunter</div>
+          <div class="avatar-row">
+            <div id="avatarPreview" class="avatar-preview">
+              <span id="avatarInitials">JM</span>
+            </div>
+            <div class="avatar-meta">
+              <div id="avatarNameLabel">JadedMystery</div>
+              <div style="font-size:0.7rem;color:#6b7280;">This is how you'll appear in the van.</div>
+            </div>
+          </div>
+          <div class="avatar-upload">
+            Upload a profile picture (optional):
+            <input id="avatarFile" type="file" accept="image/*">
+          </div>
         </div>
       </div>
 
@@ -43,7 +62,7 @@
             <div class="input-shell">
               <input id="playerName" type="text" maxlength="20" placeholder="JadedMystery">
             </div>
-            <div class="helper">This is how you'll appear in the van.</div>
+            <div class="helper">This name will appear in the van and in the call.</div>
           </div>
           <div class="field">
             <div class="field-label">Room Code</div>
