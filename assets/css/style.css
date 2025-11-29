@@ -876,3 +876,6 @@ body {
   max-height: 140px;
   object-fit: cover;
 }
+
+/* layout fix */
+.van-layout{display:grid!important;grid-template-columns:260px auto!important;width:100%!important;}
