@@ -1,5 +1,9 @@
-body{background:#050b16;color:white;font-family:Arial;}
-.title{text-align:center;margin-top:60px;font-size:32px;}
-.lobby-controls{text-align:center;margin-top:40px;}
-.van-layout{padding:40px;}
-.chat-panel{border:2px solid #0ff;padding:20px;width:300px;background:#0a1220;}
+
+body { background:#050b16; color:white; font-family:Arial; margin:0; padding:0; }
+h1 { text-align:center; margin-top:40px; }
+.lobby-controls { text-align:center; margin-top:40px; }
+input { padding:8px; }
+button { padding:8px 16px; margin-left:10px; }
+.chat-panel { border:2px solid #0ff; width:300px; padding:20px; background:#0a1220; }
+#messages { height:200px; overflow-y:auto; background:#0003; margin-bottom:10px; padding:10px; }
+.van-layout { padding:40px; }

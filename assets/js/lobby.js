@@ -1,1 +1,1 @@
-// lobby js
+console.log("lobby placeholder");

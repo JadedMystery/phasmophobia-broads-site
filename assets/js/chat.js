@@ -1,1 +1,1 @@
-// chat js
+console.log("chat placeholder");

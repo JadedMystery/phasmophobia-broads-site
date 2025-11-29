@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,27 +7,30 @@
 <link rel="stylesheet" href="assets/css/style.css">
 <script type="module" src="assets/js/chat.js"></script>
 </head>
-<body class="van">
+<body>
 <audio id="doorOpen" src="assets/audio/door_open.mp3"></audio>
 <audio id="doorSlam" src="assets/audio/door_slam.mp3"></audio>
 
 <div class="van-layout">
-    <button id="openVoice" class="voice-btn">OPEN VOICE ROOM</button>
-    <a href="index.html" id="backLobby" class="back-btn">← BACK TO LOBBY</a>
+<button id="openVoice">OPEN VOICE ROOM</button>
+<a href="index.html" id="backLobby">← BACK TO LOBBY</a>
 
-    <div class="chat-panel">
-        <h3>VAN COMMS (LOCAL)</h3>
-        <div id="messages"></div>
-        <input id="msgInput" placeholder="Type a message...">
-        <button id="sendMsg">SEND</button>
-    </div>
+<div class="chat-panel">
+<h3>VAN COMMS (LOCAL)</h3>
+<div id="messages"></div>
+<input id="msgInput" placeholder="Type a message...">
+<button id="sendMsg">SEND</button>
+</div>
 </div>
 
 <script>
 document.getElementById("doorOpen").play();
-document.getElementById("backLobby").addEventListener("click", ()=>{
-    document.getElementById("doorSlam").play();
-});
+document.getElementById("backLobby").onclick=function(){
+ document.getElementById("doorSlam").play();
+};
+document.getElementById("openVoice").onclick=function(){
+ window.open("https://meet.jit.si/BROADS","_blank");
+};
 </script>
 
 </body>
