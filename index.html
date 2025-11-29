@@ -1,5 +1,23 @@
-
-<!DOCTYPE html><html><body>
-<h2>Phasma Lobby Placeholder</h2>
-<p>This is a minimal placeholder while Malachi builds the full version.</p>
-</body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Phasma Lobby</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="lobby">
+    <h1>Phasmophobia Broads Lobby</h1>
+    <input id="username" placeholder="Enter Username">
+    <input id="room" placeholder="Room Code">
+    <button id="enterVan">Enter Van</button>
+  </div>
+<script>
+document.getElementById("enterVan").onclick = () => {
+  const name = document.getElementById("username").value;
+  const room = document.getElementById("room").value;
+  window.location = `chat.html?room=${room}&name=${name}`;
+};
+</script>
+</body>
+</html>
