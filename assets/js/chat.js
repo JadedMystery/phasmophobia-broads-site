@@ -32,34 +32,14 @@ function getParams() {
   };
 }
 
-/* Avatar initials */
+// ---------- Avatar / message rendering ----------
+
 function initials(name) {
   const parts = name.split(" ").filter(Boolean);
-  if (parts.length >= 2) {
-    return (parts[0][0] + parts[1][0]).toUpperCase();
-  }
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
   return (name[0] || "?").toUpperCase();
 }
 
-/* Ghost AI canned lines (client-side, no external API) */
-const ghostLines = [
-  "…I see you in the truck. Come inside.",
-  "The basement is getting lonely.",
-  "Someone dropped their sanity at the door.",
-  "Did you really think the van would save you?",
-  "Footsteps. Behind you. Don’t turn around.",
-  "Your EMF reader is lying.",
-  "I like the one who screams the loudest.",
-  "Who touched my Ouija board?",
-  "You left the light on. I turned it off.",
-  "Keep talking. I’m listening through the spirit box."
-];
-
-function randomGhostLine() {
-  return ghostLines[Math.floor(Math.random() * ghostLines.length)];
-}
-
-/* Append message DOM */
 function appendMessage(msg, currentUser) {
   const box = document.getElementById("chatMessages");
   if (!box) return;
@@ -68,7 +48,6 @@ function appendMessage(msg, currentUser) {
   row.className = "chat-message";
 
   const type = msg.type || "chat";
-
   if (type === "system") row.classList.add("system");
   if (type === "dm") row.classList.add("dm");
   if (type === "ghost") row.classList.add("ghost");
@@ -79,13 +58,9 @@ function appendMessage(msg, currentUser) {
 
   const nameSpan = document.createElement("span");
   nameSpan.className = "chat-name";
-  if (type === "dm") {
-    nameSpan.textContent = (msg.name || "Investigator") + " [DM]:";
-  } else if (type === "system") {
-    nameSpan.textContent = (msg.name || "SYSTEM") + ":";
-  } else {
-    nameSpan.textContent = (msg.name || "Investigator") + ":";
-  }
+  if (type === "dm") nameSpan.textContent = (msg.name || "Investigator") + " [DM]:";
+  else if (type === "system") nameSpan.textContent = (msg.name || "SYSTEM") + ":";
+  else nameSpan.textContent = (msg.name || "Investigator") + ":";
 
   const textSpan = document.createElement("span");
   textSpan.textContent = " " + (msg.text || "");
@@ -95,8 +70,6 @@ function appendMessage(msg, currentUser) {
   if (msg.createdAt && msg.createdAt.toDate) {
     const d = msg.createdAt.toDate();
     timeSpan.textContent = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  } else {
-    timeSpan.textContent = "";
   }
 
   row.appendChild(avatar);
@@ -108,62 +81,159 @@ function appendMessage(msg, currentUser) {
   box.scrollTop = box.scrollHeight;
 }
 
-/* Typing indicator */
+// ---------- Typing indicator ----------
+
 let typingTimeout = null;
 async function sendTyping(room, name) {
-  const docRef = doc(db, "rooms", room, "typing", name);
-  await setDoc(docRef, { typing: true, updated: Date.now() });
+  const ref = doc(db, "rooms", room, "typing", name);
+  await setDoc(ref, { typing: true, updated: Date.now() });
   clearTimeout(typingTimeout);
   typingTimeout = setTimeout(async () => {
-    await setDoc(docRef, { typing: false, updated: Date.now() });
+    await setDoc(ref, { typing: false, updated: Date.now() });
   }, 2000);
 }
 
 function listenTyping(room, currentUser) {
   const indicator = document.getElementById("typingIndicator");
   if (!indicator) return;
-  const typingRef = collection(db, "rooms", room, "typing");
-
-  onSnapshot(typingRef, snap => {
-    const users = [];
+  const ref = collection(db, "rooms", room, "typing");
+  onSnapshot(ref, snap => {
+    const typingNames = [];
     snap.forEach(d => {
       const data = d.data();
-      if (data.typing && d.id !== currentUser) {
-        users.push(d.id);
-      }
+      if (data.typing && d.id !== currentUser) typingNames.push(d.id);
     });
-    if (users.length > 0) {
-      indicator.textContent = users.join(", ") + " is typing...";
-    } else {
-      indicator.textContent = "";
-    }
+    indicator.textContent = typingNames.length
+      ? typingNames.join(", ") + " is typing..."
+      : "";
   });
 }
 
-/* System message helper */
-async function sendSystemMessage(room, text) {
-  const messagesRef = collection(db, "rooms", room, "messages");
-  await addDoc(messagesRef, {
-    text,
-    name: "SYSTEM",
-    type: "system",
-    createdAt: serverTimestamp()
-  });
+// ---------- Sanity / EMF / FX ----------
+
+let sanity = 100;
+let lastChatTime = 0;
+
+function updateSanityUI() {
+  const bar = document.getElementById("sanityBar");
+  const pct = document.getElementById("sanityPct");
+  if (bar) bar.style.width = sanity + "%";
+  if (pct) pct.textContent = sanity + "%";
 }
 
-/* Ghost AI message helper (client-side canned) */
+function drainSanity() {
+  const now = Date.now();
+  const diff = now - lastChatTime;
+  lastChatTime = now;
+  let amount = 1;
+  if (diff < 5000) amount = 3;
+  if (diff < 2000) amount = 5;
+  sanity = Math.max(0, sanity - amount);
+  updateSanityUI();
+}
+
+function heavySanityDrain() {
+  sanity = Math.max(0, sanity - 10);
+  updateSanityUI();
+}
+
+function spikeEMF() {
+  const meter = document.getElementById("emfMeter");
+  if (!meter) return;
+  meter.textContent = "EMF 5";
+  meter.style.color = "red";
+  meter.classList.add("emf-spike");
+  setTimeout(() => {
+    meter.textContent = "EMF 2";
+    meter.style.color = "#38bdf8";
+    meter.classList.remove("emf-spike");
+  }, 2000);
+}
+
+function flickerScreen() {
+  const body = document.body;
+  const original = body.style.filter || "";
+  body.style.filter = "brightness(40%)";
+  setTimeout(() => {
+    body.style.filter = original || "brightness(100%)";
+  }, 300);
+}
+
+function playScream() {
+  const options = [
+    "assets/sfx/ghost_whoosh.mp3",
+    "assets/sfx/ghost_scream.wav"
+  ];
+  const file = options[Math.floor(Math.random() * options.length)];
+  const audio = new Audio(file);
+  audio.play().catch(() => {});
+}
+
+// ---------- Ghost personalities / maps ----------
+
+const ghostPersonalities = {
+  demon: [
+    "I will tear you apart.",
+    "Run while you can."
+  ],
+  banshee: [
+    "I found my target.",
+    "Your voice is shaking."
+  ],
+  yokai: [
+    "Too loud... silence yourselves."
+  ]
+};
+
+const mapGhostLines = {
+  TANGLEWOOD: [
+    "These walls remember every scream.",
+    "You’ve walked these halls before… in a nightmare."
+  ],
+  WILLOW: [
+    "The campsite isn’t as empty as you think.",
+    "The trees whisper your name."
+  ],
+  RIDGEVIEW: [
+    "So many rooms to die in.",
+    "You should have stayed in the truck."
+  ]
+};
+
+const fallbackGhostLines = [
+  "…I see you in the truck. Come inside.",
+  "The basement is getting lonely.",
+  "Someone dropped their sanity at the door.",
+  "Did you really think the van would save you?",
+  "Footsteps. Behind you. Don’t turn around.",
+  "I like the one who screams the loudest."
+];
+
+function randomFrom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function randomPersonality() {
+  const keys = Object.keys(ghostPersonalities);
+  return randomFrom(keys);
+}
+
+function randomPersonalityLine(type) {
+  const arr = ghostPersonalities[type] || fallbackGhostLines;
+  return randomFrom(arr);
+}
+
 async function sendGhostMessage(room) {
   const messagesRef = collection(db, "rooms", room, "messages");
   const rawRoom = (room || "").toString();
   const mapKey = rawRoom.split("-")[0].toUpperCase();
 
   let text;
-  if (mapGhostLines[mapKey] && mapGhostLines[mapKey].length > 0) {
-    const arr = mapGhostLines[mapKey];
-    text = arr[Math.floor(Math.random() * arr.length)];
+  if (mapGhostLines[mapKey]) {
+    text = randomFrom(mapGhostLines[mapKey]);
   } else {
-    const type = randomPersonality();
-    text = randomPersonalityLine(type);
+    const personality = randomPersonality();
+    text = randomPersonalityLine(personality);
   }
 
   await addDoc(messagesRef, {
@@ -177,10 +247,20 @@ async function sendGhostMessage(room) {
   heavySanityDrain();
   spikeEMF();
   flickerScreen();
-});
 }
 
-/* Setup room list chips (predefined popular rooms, does NOT affect layout) */
+// ---------- System / room helpers ----------
+
+async function sendSystemMessage(room, text) {
+  const ref = collection(db, "rooms", room, "messages");
+  await addDoc(ref, {
+    text,
+    name: "SYSTEM",
+    type: "system",
+    createdAt: serverTimestamp()
+  });
+}
+
 function setupRoomChips(currentRoom, name) {
   const container = document.getElementById("roomQuickList");
   if (!container) return;
@@ -198,9 +278,7 @@ function setupRoomChips(currentRoom, name) {
     const chip = document.createElement("div");
     chip.className = "room-chip";
     chip.textContent = r.label;
-    if (r.code === currentRoom) {
-      chip.style.borderColor = "#38bdf8";
-    }
+    if (r.code === currentRoom) chip.style.borderColor = "#38bdf8";
     chip.addEventListener("click", () => {
       const url = new URL("chat.html", window.location.href);
       url.searchParams.set("room", r.code);
@@ -211,12 +289,12 @@ function setupRoomChips(currentRoom, name) {
   });
 }
 
-/* Setup chat: handles normal, DM, ghost commands */
+// ---------- Chat setup ----------
+
 function setupChat(room, name) {
   const form = document.getElementById("chatForm");
   const input = document.getElementById("chatInput");
   const list = document.getElementById("chatMessages");
-
   if (!form || !input || !list) return;
 
   const messagesRef = collection(db, "rooms", room, "messages");
@@ -228,13 +306,11 @@ function setupChat(room, name) {
       const data = docSnap.data();
       const type = data.type || "chat";
 
-      // Private DM: only show if you're sender or recipient
       if (type === "dm") {
-        const to = (data.to || "").trim();
-        if (to.toLowerCase() !== name.toLowerCase() &&
-            (data.name || "").trim().toLowerCase() !== name.toLowerCase()) {
-          return;
-        }
+        const to = (data.to || "").trim().toLowerCase();
+        const sender = (data.name || "").trim().toLowerCase();
+        const me = name.trim().toLowerCase();
+        if (to !== me && sender !== me) return;
       }
 
       appendMessage(data, name);
@@ -248,8 +324,7 @@ function setupChat(room, name) {
     if (!raw) return;
     input.value = "";
 
-    // Commands:
-    // /dm Name message...
+    // Private DM: /dm Name message...
     if (raw.toLowerCase().startsWith("/dm ")) {
       const rest = raw.slice(4).trim();
       const firstSpace = rest.indexOf(" ");
@@ -270,7 +345,8 @@ function setupChat(room, name) {
     }
 
     // Ghost AI trigger: /ghost or !ghost
-    if (raw.toLowerCase() === "/ghost" || raw.toLowerCase() === "!ghost") {
+    const lower = raw.toLowerCase();
+    if (lower === "/ghost" || lower === "!ghost") {
       await addDoc(messagesRef, {
         text: "…invoking something on the other side.",
         name,
@@ -294,121 +370,16 @@ function setupChat(room, name) {
   input.addEventListener("input", () => sendTyping(room, name));
 }
 
-
-// Extra ghost personalities and scream SFX hooks
-const ghostPersonalities = {
-  demon: ["I will tear you apart.", "Run while you can."],
-  banshee: ["I found my target.", "Your voice is shaking."],
-  yokai: ["Too loud...", "Silence yourselves."]
-};
-const mapGhostLines = {
-  TANGLEWOOD: [
-    "These walls remember every scream.",
-    "You’ve walked these halls before… in a nightmare."
-  ],
-  WILLOW: [
-    "The campsite isn’t as empty as you think.",
-    "The trees whisper your name."
-  ],
-  RIDGEVIEW: [
-    "So many rooms to die in.",
-    "You should have stayed in the truck."
-  ]
-};
-
-function randomPersonalityLine(type){
-  const arr=ghostPersonalities[type]||ghostLines;
-  return arr[Math.floor(Math.random()*arr.length)];
-}
-// Scream SFX placeholder
-function playScream(){
-  const a=new Audio('assets/sfx/scream.mp3');
-  a.play().catch(()=>{});
-}
-// Sanity meter simple decrement
-let sanity=100;
-let lastChatTime=0;
-function drainSanity(){
-  const now = Date.now();
-  let diff = now - lastChatTime;
-  lastChatTime = now;
-  let amount = 1;
-  if (diff < 5000) amount = 3;
-  if (diff < 2000) amount = 5;
-  sanity = Math.max(0, sanity - amount);
-  const el=document.getElementById("sanityBar");
-  const pct=document.getElementById("sanityPct");
-  if(el){ el.style.width = sanity + '%'; }
-  if(pct){ pct.textContent = sanity + '%'; }
-}
-}
-
-
-// ==== Enhanced sanity drain on ghost events ====
-function heavySanityDrain(){
-  sanity = Math.max(0, sanity - 10);
-  const el=document.getElementById("sanityBar");
-  const pct=document.getElementById("sanityPct");
-  if(el){ el.style.width = sanity + '%'; }
-  if(pct){ pct.textContent = sanity + '%'; }
-}
-
-// ==== Random ghost personality picker ====
-function randomPersonality(){
-  const keys = Object.keys(ghostPersonalities);
-  return keys[Math.floor(Math.random()*keys.length)];
-}
-
-// Override ghost message to use random personality lines
-async function sendGhostMessage(room) {
-  const type = randomPersonality();
-  const messagesRef = collection(db, "rooms", room, "messages");
-  await addDoc(messagesRef, {
-    text: randomPersonalityLine(type),
-    name: "Ghost",
-    type: "ghost",
-    createdAt: serverTimestamp()
-  });
-  playScream();
-  heavySanityDrain();
-  spikeEMF();
-  flickerScreen();
-}
-
-// === Show sanity % number ===
-
-// ==== EMF Spike ====
-function spikeEMF(){
-  const meter = document.getElementById("emfMeter");
-  if(!meter) return;
-  meter.textContent = "EMF 5";
-  meter.style.color = "red";
-  meter.classList.add("emf-spike");
-  setTimeout(()=>{
-    meter.textContent = "EMF 2";
-    meter.style.color = "#38bdf8";
-    meter.classList.remove("emf-spike");
-  }, 2000);
-}, 2000);
-}
-
-// ==== Flicker Screen ====
-function flickerScreen(){
-  const body=document.body;
-  body.style.filter="brightness(40%)";
-  setTimeout(()=>{ body.style.filter="brightness(100%)"; }, 300);
-}
-
-// hook sanity drain on normal chat too
+// ---------- Startup ----------
 
 document.addEventListener("DOMContentLoaded", () => {
   const { room, name } = getParams();
 
+  updateSanityUI();
   setupChat(room, name);
   listenTyping(room, name);
   setupRoomChips(room, name);
 
-  // System "joined" message (best-effort; may fire on reload)
   sendSystemMessage(room, name + " entered the room.").catch(() => {});
 
   const amb = document.getElementById("van-ambient");
@@ -431,6 +402,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const back = document.getElementById("backToLobby");
   if (back) {
-    back.addEventListener("click", () => (window.location.href = "index.html"));
+    back.addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
   }
 });
