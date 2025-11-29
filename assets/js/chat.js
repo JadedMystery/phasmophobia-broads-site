@@ -29,41 +29,6 @@ function applyAvatarOverlay(name, avatar) {
   }
 }
 
-function initJitsi(room, name, avatar) {
-  if (typeof JitsiMeetExternalAPI === "undefined") {
-    const status = document.getElementById("monitor-status");
-    if (status) status.textContent = "ERROR: Jitsi API not loaded";
-    return;
-  }
-
-  const domain = "meet.jit.si";
-  const container = document.getElementById("jitsi-container");
-  if (!container) return;
-
-  const options = {
-    roomName: "PhasmaBroads-" + room,
-    parentNode: container,
-    userInfo: {
-      displayName: name
-      // avatarURL: avatar || undefined  // data URLs may or may not be supported; overlay handles visuals
-    },
-    configOverwrite: {
-      prejoinPageEnabled: false,
-      disableDeepLinking: true
-    },
-    interfaceConfigOverwrite: {
-      TILE_VIEW_MAX_COLUMNS: 4,
-      SHOW_JITSI_WATERMARK: false
-    }
-  };
-
-  const api = new JitsiMeetExternalAPI(domain, options);
-  const status = document.getElementById("monitor-status");
-  if (status) status.textContent = "Connected: " + room;
-
-  return api;
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   const { room, name, avatar } = getParams();
 
@@ -81,8 +46,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   applyAvatarOverlay(name, avatar);
 
-  // small delay so layout settles before embedding Jitsi
-  setTimeout(() => {
-    initJitsi(room, name, avatar);
-  }, 400);
+  // play ambient van hum immediately on this screen
+  const vanAmbient = document.getElementById("van-ambient");
+  if (vanAmbient) {
+    vanAmbient.volume = 0.25;
+    vanAmbient.play().catch(() => {});
+  }
+
+  const openBtn = document.getElementById("openRoomBtn");
+  if (openBtn) {
+    openBtn.addEventListener("click", () => {
+      const url = "https://meet.jit.si/PhasmaBroads-" + encodeURIComponent(room);
+      // play hunt sting when they open the room
+      const hunt = document.getElementById("hunt-sfx");
+      if (hunt) { hunt.currentTime = 0; hunt.play().catch(() => {}); }
+      window.open(url, "_blank");
+    });
+  }
 });

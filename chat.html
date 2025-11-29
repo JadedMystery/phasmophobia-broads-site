@@ -24,7 +24,7 @@
         <div class="monitor-shell">
           <div class="monitor-header">
             <span>☠ Live Van Feed</span>
-            <span id="monitor-status">Connecting...</span>
+            <span id="monitor-status">Ready</span>
           </div>
           <div class="monitor-body">
             <div id="jitsi-container"></div>
@@ -40,16 +40,21 @@
 
         <div class="monitor-footer">
           <div class="monitor-chips">
-            <div class="chip green">Voice &amp; Video via Jitsi (free)</div>
-            <div class="chip">Use built-in controls to mute / camera / share screen</div>
+            <div class="chip green">Step 1: Click “Open Voice Room”</div>
+            <div class="chip">Step 2: Jitsi opens in a new tab for the actual call</div>
           </div>
-          <div id="backToLobby" class="back-link">◀ Back to Lobby</div>
+          <div style="display:flex;align-items:center;gap:0.6rem;">
+            <button id="openRoomBtn" class="btn btn-secondary" type="button">Open Voice Room</button>
+            <div id="backToLobby" class="back-link">◀ Back to Lobby</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <script src="https://meet.jit.si/external_api.js"></script>
+  <audio id="van-ambient" src="assets/audio/van.wav" loop></audio>
+  <audio id="hunt-sfx" src="assets/audio/hunt.wav"></audio>
+
   <script src="assets/js/chat.js"></script>
 </body>
 </html>

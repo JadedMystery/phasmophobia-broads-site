@@ -53,6 +53,8 @@ function goToChat(roomCode, playerName) {
     // pass small avatar via URL; for big files this may be truncated but okay for simple use
     params.set("avatar", avatarDataUrl);
   }
+  const clickSound = document.getElementById("ui-click");
+  if (clickSound) { clickSound.currentTime = 0; clickSound.play().catch(() => {}); }
   window.location.href = "chat.html?" + params.toString();
 }
 
@@ -63,6 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     clearInterval(tipInterval);
     showLobby();
+    const lobbyAmbient = document.getElementById("lobby-ambient");
+    if (lobbyAmbient) {
+      lobbyAmbient.volume = 0.25;
+      lobbyAmbient.play().catch(() => {});
+    }
   }, 3500);
 
   const nameInput = document.getElementById("playerName");
