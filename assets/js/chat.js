@@ -29,6 +29,25 @@ function applyAvatarOverlay(name, avatar) {
   }
 }
 
+function appendChatMessage(name, text) {
+  const list = document.getElementById("chatMessages");
+  if (!list) return;
+  const row = document.createElement("div");
+  row.className = "chat-message";
+
+  const nameSpan = document.createElement("span");
+  nameSpan.className = "chat-name";
+  nameSpan.textContent = name + ":";
+
+  const textSpan = document.createElement("span");
+  textSpan.textContent = " " + text;
+
+  row.appendChild(nameSpan);
+  row.appendChild(textSpan);
+  list.appendChild(row);
+  list.scrollTop = list.scrollHeight;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const { room, name, avatar } = getParams();
 
@@ -46,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   applyAvatarOverlay(name, avatar);
 
-  // play ambient van hum immediately on this screen
+  // play van ambient once
   const vanAmbient = document.getElementById("van-ambient");
   if (vanAmbient) {
     vanAmbient.volume = 0.25;
@@ -57,10 +76,28 @@ document.addEventListener("DOMContentLoaded", () => {
   if (openBtn) {
     openBtn.addEventListener("click", () => {
       const url = "https://meet.jit.si/PhasmaBroads-" + encodeURIComponent(room);
-      // play hunt sting when they open the room
+
+      // entry / hunt sounds
+      const joinSfx = document.getElementById("join-sfx");
+      if (joinSfx) { joinSfx.currentTime = 0; joinSfx.play().catch(() => {}); }
+
       const hunt = document.getElementById("hunt-sfx");
       if (hunt) { hunt.currentTime = 0; hunt.play().catch(() => {}); }
+
       window.open(url, "_blank");
+    });
+  }
+
+  // simple local van chat (not networked)
+  const chatForm = document.getElementById("chatForm");
+  const chatInput = document.getElementById("chatInput");
+  if (chatForm && chatInput) {
+    chatForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+      appendChatMessage(name, text);
+      chatInput.value = "";
     });
   }
 });
