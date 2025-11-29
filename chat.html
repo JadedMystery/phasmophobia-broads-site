@@ -7,7 +7,10 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="assets/css/style.css" rel="stylesheet"/>
 </head>
-<body><div id="vanCCTV"><img id="cctvVan" src="assets/img/camera/scene_1.png" style="width:100%;border:2px solid #0ff;"/></div>
+<body>
+<div class="van-layout">
+  <div class="van-main">
+<div id="vanCCTV"><img id="cctvVan" src="assets/img/camera/scene_1.png" style="width:100%;border:2px solid #0ff;"/></div>
 <div class="screen chat-root">
 <div class="van-scene">
 <div class="van-wall-column">
@@ -50,14 +53,24 @@
 </div>
 </div>
 </div>
-<audio id="van-ambient" loop="" src="assets/audio/van.wav"></audio>
+<audio id="van-ambient" src="assets/audio/van.wav"></audio>
 <audio id="hunt-sfx" src="assets/audio/hunt.wav"></audio>
 <script src="assets/js/chat.js"></script>
 <script src="assets/js/camera.js"></script>
 <div class="cctv-container">
-  <img id="cctvVan" src="assets/img/camera/scene_1.png" width="600" height="400">
-  <img class="staticOverlay" src="assets/img/static.png" width="600" height="400">
+  <img id="cctvVan" src="assets/img/camera/scene_1.png" width="600" height="400"></div>
+
+
+  </div>
+  <div id="chatPanel">
+    <div id="chatMessages"></div>
+    <div class="chat-input-row">
+      <input id="chatInput" type="text" placeholder="Type a message..." />
+      <button id="sendMsg">Send</button>
+    </div>
+  </div>
 </div>
 
+<script type="module" src="assets/js/chat-ui.js"></script>
 </body>
 </html>

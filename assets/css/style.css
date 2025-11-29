@@ -584,3 +584,106 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+
+/* Chat panel + van layout */
+.van-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 20px;
+}
+
+.van-main {
+  flex: 1 1 auto;
+}
+
+#chatPanel {
+  width: 320px;
+  max-width: 35vw;
+  height: 420px;
+  background: rgba(5, 10, 20, 0.95);
+  border: 2px solid #0ff;
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.35);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+#chatPanel::before {
+  content: "VAN COMMS";
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #7ff;
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+#chatMessages {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  background: #020509;
+  border: 1px solid #033;
+  padding: 6px;
+}
+
+.chat-msg {
+  margin-bottom: 4px;
+}
+
+.chat-msg .name {
+  color: #7ff;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.chat-msg .text {
+  color: #cfefff;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+#chatInput {
+  flex: 1 1 auto;
+  background: #050b12;
+  border: 1px solid #055;
+  padding: 4px 6px;
+  color: #cff;
+}
+
+#chatInput:focus {
+  outline: none;
+  border-color: #0ff;
+}
+
+#sendMsg {
+  padding: 4px 10px;
+  background: #0ff;
+  border: none;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#sendMsg:hover {
+  filter: brightness(1.1);
+}
+
+/* Small screens */
+@media (max-width: 800px) {
+  .van-layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #chatPanel {
+    width: 100%;
+    max-width: none;
+  }
+}
