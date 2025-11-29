@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Van Monitor - Phasmophobia Broads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="screen chat-root">
+    <div class="van-scene">
+      <div class="van-wall-column">
+        <div class="van-wall-header">Pinned Evidence</div>
+        <div class="van-photo-stack">
+          <div class="van-photo"><img src="assets/images/ChatGPT Image Nov 25, 2025, 01_35_48 PM_1764099378740.png" alt="Phasmophobia Broads art"><div class="van-photo-tag">Squad</div></div><div class="van-photo"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_40_24 PM_1764191715699.png" alt="Phasmophobia Broads art"><div class="van-photo-tag">Squad</div></div><div class="van-photo"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_58_04 PM_1764191759271.png" alt="Phasmophobia Broads art"><div class="van-photo-tag">Squad</div></div><div class="van-photo"><img src="assets/images/ChatGPT Image Nov 25, 2025, 07_27_30 PM_1764191734113.png" alt="Phasmophobia Broads art"><div class="van-photo-tag">Squad</div></div>
+        </div>
+        <div class="room-pill">
+          Room: <strong id="room-label">--</strong><br>
+          Hunter: <strong id="player-label">--</strong>
+        </div>
+      </div>
+
+      <div class="van-monitor-column">
+        <div class="monitor-shell">
+          <div class="monitor-header">
+            <span>☠ Live Van Feed</span>
+            <span id="monitor-status">Ready</span>
+          </div>
+          <div class="monitor-body">
+            <div id="jitsi-container"></div>
+            <div class="monitor-overlay"></div>
+            <div class="monitor-avatar">
+              <div id="monitorAvatarCircle" class="monitor-avatar-circle">
+                <span id="monitorAvatarInitials">JM</span>
+              </div>
+              <div id="monitorAvatarLabel" class="monitor-avatar-label">JadedMystery</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+        </div>
+
+        <div class="monitor-footer">
+          <div class="monitor-chips">
+            <div class="chip green">Step 1: Click “Open Voice Room”</div>
+            <div class="chip">Step 2: Jitsi opens in a new tab for the actual call</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.6rem;">
+            <button id="openRoomBtn" class="btn btn-secondary" type="button">Open Voice Room</button>
+            <div id="backToLobby" class="back-link">◀ Back to Lobby</div>
+          </div>
+        </div>
+
+        <div class="van-chat">
+          <div class="van-chat-header">Van Comms (room chat)</div>
+          <div id="roomQuickList" class="room-quick-list"></div>
+          <div id="chatMessages" class="van-chat-messages"></div>
+          <form id="chatForm" class="van-chat-form">
+            <input id="chatInput" type="text" maxlength="280" placeholder="Type a message to everyone in this room...">
+            <button type="submit" class="btn btn-ghost">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="van-ambient" src="assets/audio/van.wav"></audio>
+  <audio id="hunt-sfx" src="assets/audio/hunt.wav"></audio>
+  <audio id="join-sfx" src="assets/audio/join.wav"></audio>
+  <audio id="leave-sfx" src="assets/audio/leave.wav"></audio>
+
+  <script type="module" src="assets/js/chat.js"></script>
+</body>
+</html>
