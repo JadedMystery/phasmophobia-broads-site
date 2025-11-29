@@ -994,3 +994,89 @@ body {
   color: #38bdf8;
   text-shadow: 0 0 6px rgba(56,189,248,0.9);
 }
+
+
+/* === LAYOUT A: Full-width dashboard van layout (FINAL OVERRIDE) === */
+
+/* Root screen stays full width */
+.screen.chat-root {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* 3-column grid: Evidence | Monitor | Chat */
+.van-scene {
+  display: grid !important;
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1.1fr) minmax(0, 1fr) !important;
+  gap: 1.25rem !important;
+  width: 100% !important;
+  align-items: flex-start;
+}
+
+/* Left evidence column */
+.van-wall-column {
+  grid-column: 1;
+  grid-row: 1 / span 3;
+  width: 100%;
+  max-width: 260px;
+}
+
+/* Evidence stack: vertical, compact */
+.van-photo-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.van-photo {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+}
+
+/* Center monitor + footer in column 2 */
+.van-monitor-column {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+}
+
+.monitor-footer {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* Chat gets full third column */
+.van-chat {
+  grid-column: 3;
+  grid-row: 1 / span 3;
+  width: 100%;
+}
+
+/* Make chat messages area taller & nicer for RP */
+.van-chat-messages {
+  height: 420px;
+}
+
+/* Ensure ghost help panel overlays everything */
+#ghostHelpPanel {
+  z-index: 9999;
+}
+
+/* Responsive fallback: stack for narrow screens */
+@media (max-width: 980px) {
+  .van-scene {
+    grid-template-columns: 1fr;
+  }
+  .van-wall-column,
+  .van-monitor-column,
+  .monitor-footer,
+  .van-chat {
+    grid-column: 1;
+    grid-row: auto;
+    max-width: 100%;
+  }
+  .van-chat-messages {
+    height: 320px;
+  }
+}
