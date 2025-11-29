@@ -9,6 +9,18 @@
 </head>
 <body>
 <div class="van-layout">
+  <div class="van-left">
+    <div id="vanCCTV" class="cctv-frame">
+      <img id="cctvImage" src="assets/img/camera/scene_1.png" alt="Van camera feed">
+    </div>
+    <div class="cam-controls">
+      <button id="prevCam" class="cam-btn">◀ Prev Cam</button>
+      <button id="nextCam" class="cam-btn">Next Cam ▶</button>
+    </div>
+  </div>
+  <div class="van-right">
+
+
   <div class="van-main">
 <div id="vanCCTV"><img id="cctvVan" src="assets/img/camera/scene_1.png" style="width:100%;border:2px solid #0ff;"/></div>
 <div class="screen chat-root">
@@ -56,7 +68,7 @@
 <audio id="van-ambient" src="assets/audio/van.wav"></audio>
 <audio id="hunt-sfx" src="assets/audio/hunt.wav"></audio>
 <script src="assets/js/chat.js"></script>
-<script src="assets/js/camera.js"></script>
+
 <div class="cctv-container">
   <img id="cctvVan" src="assets/img/camera/scene_1.png" width="600" height="400"></div>
 
@@ -72,5 +84,10 @@
 </div>
 
 <script type="module" src="assets/js/chat-ui.js"></script>
+
+  </div>
+</div>
+<!-- van-layout-end -->
+<script type="module" src="assets/js/camera-controls.js"></script>
 </body>
 </html>

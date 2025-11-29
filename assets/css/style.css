@@ -687,3 +687,148 @@ body {
     max-width: none;
   }
 }
+
+
+/* Van layout: camera left, chat right */
+.van-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px;
+}
+
+.van-left {
+  flex: 0 0 640px;
+}
+
+.cctv-frame {
+  border: 2px solid #0ff;
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.35);
+  background: #020509;
+  padding: 8px;
+}
+
+.cctv-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cam-controls {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.cam-btn {
+  padding: 5px 12px;
+  background: #021820;
+  border: 1px solid #0ff;
+  color: #cfffff;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.cam-btn:hover {
+  background: #043046;
+}
+
+.van-right {
+  flex: 0 0 320px;
+}
+
+/* Chat panel styling */
+#chatPanel {
+  width: 320px;
+  height: 420px;
+  background: rgba(5, 10, 20, 0.95);
+  border: 2px solid #0ff;
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.35);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+
+#chatPanel::before {
+  content: "VAN COMMS";
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #7ff;
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+#chatMessages {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  background: #020509;
+  border: 1px solid #033;
+  padding: 6px;
+}
+
+.chat-msg {
+  margin-bottom: 4px;
+}
+
+.chat-msg .name {
+  color: #7ff;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.chat-msg .text {
+  color: #cfefff;
+}
+
+.chat-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+#chatInput {
+  flex: 1 1 auto;
+  background: #050b12;
+  border: 1px solid #055;
+  padding: 4px 6px;
+  color: #cff;
+}
+
+#chatInput:focus {
+  outline: none;
+  border-color: #0ff;
+}
+
+#sendMsg {
+  padding: 4px 10px;
+  background: #0ff;
+  border: none;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#sendMsg:hover {
+  filter: brightness(1.1);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .van-layout {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .van-left, .van-right {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+  #chatPanel {
+    width: 100%;
+  }
+}
