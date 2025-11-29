@@ -1,66 +1,43 @@
 
-function getParams() {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    room: params.get("room") || "BROADSVAN",
-    name: params.get("name") || "Investigator",
-    avatar: params.get("avatar") || ""
-  };
-}
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } 
+  from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-function applyAvatarOverlay(name, avatar) {
-  const label = document.getElementById("monitorAvatarLabel");
-  const initialsEl = document.getElementById("monitorAvatarInitials");
-  const circle = document.getElementById("monitorAvatarCircle");
+const firebaseConfig = {
+  apiKey: "AIzaSyB2WA7yotRlqNidwIgJcT19JNrK8ukMgs4",
+  authDomain: "phasmophobiabroads.firebaseapp.com",
+  projectId: "phasmophobiabroads",
+  storageBucket: "phasmophobiabroads.firebasestorage.app",
+  messagingSenderId: "503659624108",
+  appId: "1:503659624108:web:6e57fbc6bf36b0d5989109"
+};
 
-  if (label) label.textContent = name;
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  if (avatar && circle) {
-    circle.innerHTML = "";
-    const img = document.createElement("img");
-    img.src = avatar;
-    circle.appendChild(img);
-  } else if (initialsEl) {
-    const parts = name.trim().split(/\s+/);
-    let initials = "";
-    if (parts.length === 1) initials = parts[0].substring(0,2).toUpperCase();
-    else initials = (parts[0][0] + parts[1][0]).toUpperCase();
-    initialsEl.textContent = initials;
-  }
-}
+const params = new URLSearchParams(window.location.search);
+const room = params.get("room");
+const name = params.get("name");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const { room, name, avatar } = getParams();
+const msgRef = collection(db, "rooms", room, "messages");
+const q = query(msgRef, orderBy("createdAt"));
 
-  const roomLabel = document.getElementById("room-label");
-  const nameLabel = document.getElementById("player-label");
-  if (roomLabel) roomLabel.textContent = room;
-  if (nameLabel) nameLabel.textContent = name;
-
-  const back = document.getElementById("backToLobby");
-  if (back) {
-    back.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
-  }
-
-  applyAvatarOverlay(name, avatar);
-
-  // play ambient van hum immediately on this screen
-  const vanAmbient = document.getElementById("van-ambient");
-  if (vanAmbient) {
-    vanAmbient.volume = 0.25;
-    vanAmbient.play().catch(() => {});
-  }
-
-  const openBtn = document.getElementById("openRoomBtn");
-  if (openBtn) {
-    openBtn.addEventListener("click", () => {
-      const url = "https://meet.jit.si/PhasmaBroads-" + encodeURIComponent(room);
-      // play hunt sting when they open the room
-      const hunt = document.getElementById("hunt-sfx");
-      if (hunt) { hunt.currentTime = 0; hunt.play().catch(() => {}); }
-      window.open(url, "_blank");
-    });
-  }
+onSnapshot(q, snap => {
+  const box = document.getElementById("chatMessages");
+  box.innerHTML="";
+  snap.forEach(doc=>{
+    const d=doc.data();
+    let div=document.createElement("div");
+    div.className="msg";
+    div.textContent = d.name + ": " + d.text;
+    box.appendChild(div);
+  });
+  box.scrollTop=box.scrollHeight;
 });
+
+document.getElementById("sendMsg").onclick=async()=>{
+  const text=document.getElementById("chatInput").value;
+  if(!text) return;
+  await addDoc(msgRef,{name,text,createdAt:serverTimestamp()});
+  document.getElementById("chatInput").value="";
+};
