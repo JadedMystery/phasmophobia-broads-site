@@ -1,1 +1,70 @@
-<!DOCTYPE html><html><body><h1>Lobby Placeholder</h1></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phasmophobia Broads HQ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div id="loading-screen" class="screen loading-screen">
+    <div>
+      <div class="logo-title">Phasmophobia Broads</div>
+      <div class="logo-subtitle">Booting up cursed surveillance van...</div>
+      <div class="loading-bar-wrap">
+        <div class="loading-bar"></div>
+      </div>
+      <div class="ghost-tip-label">Ghost Tip</div>
+      <div id="ghost-tip" class="ghost-tip">If you hear your name whispered behind you... run, babe.</div>
+    </div>
+  </div>
+
+  <div id="lobby-screen" class="screen lobby-screen hidden">
+    <div class="van-wrapper">
+      <div>
+        <div class="van-wall-title">Case Files &amp; Chaos</div>
+        <div class="photo-grid">
+          <div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 01_35_48 PM_1764099378740.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_40_24 PM_1764191715699.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_58_04 PM_1764191759271.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 07_27_30 PM_1764191734113.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div>
+        </div>
+      </div>
+
+      <div class="van-console">
+        <div class="console-header">
+          <div>
+            <div class="console-title">Investigation Lobby</div>
+            <div class="console-sub">Name your hunter, choose a room code, and get in the van.</div>
+          </div>
+          <div class="console-pill">Max 8 Players</div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <div class="field-label">Hunter Name</div>
+            <div class="input-shell">
+              <input id="playerName" type="text" maxlength="20" placeholder="JadedMystery">
+            </div>
+            <div class="helper">This is how you'll appear in the van.</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Room Code</div>
+            <div class="input-shell">
+              <input id="roomCode" type="text" maxlength="12" placeholder="EX: DEMON1">
+            </div>
+            <div class="helper">Share this with friends so they join the same haunting.</div>
+          </div>
+        </div>
+
+        <div class="console-buttons">
+          <button id="createLobbyBtn" class="btn btn-primary" type="button">Create Lobby</button>
+          <button id="joinLobbyBtn" class="btn btn-secondary" type="button">Join Lobby</button>
+          <button id="randomCodeBtn" class="btn btn-ghost" type="button">Random Room Code</button>
+        </div>
+
+        <div class="helper">Tip: Whoever creates the lobby should stream from a stable device &amp; internet if possible.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/lobby.js"></script>
+</body>
+</html>
