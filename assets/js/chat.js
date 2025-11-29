@@ -372,7 +372,28 @@ function setupChat(room, name) {
 
 // ---------- Startup ----------
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener\(\"DOMContentLoaded\", \(\) => {
+
+    const helpBtn = document.getElementById("ghostHelpBtn");
+    const helpPanel = document.getElementById("ghostHelpPanel");
+    const helpClose = document.getElementById("ghostHelpClose");
+
+    if (helpBtn && helpPanel) {
+      helpBtn.addEventListener("click", () => {
+        helpPanel.classList.add("open");
+      });
+    }
+    if (helpClose && helpPanel) {
+      helpClose.addEventListener("click", () => {
+        helpPanel.classList.remove("open");
+      });
+    }
+    if (helpPanel) {
+      helpPanel.addEventListener("click", (e) => {
+        if (e.target === helpPanel) helpPanel.classList.remove("open");
+      });
+    }
+
   const { room, name } = getParams();
 
   updateSanityUI();

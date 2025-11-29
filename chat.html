@@ -52,6 +52,7 @@
         </div>
 
         <div class="van-chat">
+      <button id="ghostHelpBtn" class="ghost-help-btn" type="button">Ghost Commands</button>
           <div style="color:white;font-size:12px;margin-bottom:3px;">Sanity: <span id="sanityPct">100%</span></div>
         <div id="sanityBar" style="height:4px;background:red;width:100%;"></div>
         <div id="emfMeter" style="color:#38bdf8;font-size:13px;margin-bottom:4px;">EMF 2</div>
@@ -73,5 +74,30 @@
   <audio id="leave-sfx" src="assets/audio/leave.wav"></audio>
 
   <script type="module" src="assets/js/chat.js"></script>
+
+<div id="ghostHelpPanel" class="ghost-help-panel">
+  <div class="ghost-help-card">
+    <div class="ghost-help-title">Ghost Commands & Tricks</div>
+    <div class="ghost-help-body">
+      <p>Use these commands in the van chat to stir things up:</p>
+      <ul>
+        <li><code>/ghost</code> or <code>!ghost</code> – Trigger a ghost event (map-aware lines, scream, sanity drop, EMF 5, screen flicker).</li>
+        <li><code>/dm Name message</code> – Send a private DM that only you and <em>Name</em> can see.</li>
+      </ul>
+      <p><strong>Rooms & Maps</strong></p>
+      <ul>
+        <li>Use room chips above the chat to jump between: Main Van, Tanglewood Truck, Tanglewood Basement, Willow Truck, Ridgeview Truck.</li>
+        <li>The ghost changes behavior and lines depending on the map.</li>
+      </ul>
+      <p><strong>Sanity & EMF</strong></p>
+      <ul>
+        <li>Chatting slowly drains sanity; panicking (spamming messages) drains it faster.</li>
+        <li>Ghost events slam sanity and spike EMF to 5.</li>
+      </ul>
+    </div>
+    <button id="ghostHelpClose" class="ghost-help-close" type="button">Close</button>
+  </div>
+</div>
+
 </body>
 </html>
