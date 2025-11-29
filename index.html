@@ -1,192 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Van Comms</title>
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <style>
-        body {
-            background: #020617;
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
-            display: flex;
-        }
-
-        /* LEFT — MONITOR */
-        #camera-container {
-            width: 70%;
-            height: 100vh;
-            background: #000;
-            border-right: 2px solid #0ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        /* PHASMO "NO FEED" GLOW TEXT */
-        .no-feed-text {
-            font-size: 42px;
-            letter-spacing: 4px;
-            color: #0ff;
-            opacity: 0.8;
-            text-shadow: 0 0 20px #0ff, 0 0 40px #0ff;
-            animation: flicker 2s infinite;
-        }
-
-        @keyframes flicker {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.4; }
-        }
-
-        /* RIGHT — CHAT */
-        #chat-panel {
-            width: 30%;
-            height: 100vh;
-            background: #05101f;
-            padding: 10px;
-            box-sizing: border-box;
-            border-left: 2px solid #0ff;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #chat-log {
-            flex-grow: 1;
-            background: #000;
-            color: #0ff;
-            padding: 10px;
-            border: 2px solid #0ff;
-            overflow-y: auto;
-            font-size: 14px;
-        }
-
-        #chat-input {
-            display: flex;
-            margin-top: 10px;
-        }
-
-        #chat-input input {
-            flex-grow: 1;
-            padding: 10px;
-            background: #0a1a2f;
-            border: 2px solid #0ff;
-            color: #0ff;
-        }
-
-        #chat-input button {
-            padding: 10px 20px;
-            background: #0ff;
-            border: none;
-            cursor: pointer;
-            color: #000;
-            margin-left: 5px;
-            font-weight: bold;
-        }
-
-        .system {
-            color: #6cf;
-        }
-
-        /* BUTTON TO OPEN JITSI */
-        #open-voice {
-            margin-top: 10px;
-            padding: 10px;
-            background: #0ff;
-            border: none;
-            cursor: pointer;
-            color: #000;
-            font-weight: bold;
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Phasmophobia Broads HQ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
-
-    <!-- LEFT: NO VIDEO FEED SCREEN -->
-    <div id="camera-container">
-        <div class="no-feed-text">NO VIDEO FEED</div>
+  <div id="loading-screen" class="screen loading-screen">
+    <div>
+      <div class="logo-title">Phasmophobia Broads</div>
+      <div class="logo-subtitle">Booting up cursed surveillance van...</div>
+      <div class="loading-bar-wrap">
+        <div class="loading-bar"></div>
+      </div>
+      <div class="ghost-tip-label">Ghost Tip</div>
+      <div id="ghost-tip" class="ghost-tip">If you hear your name whispered behind you... run, babe.</div>
     </div>
+  </div>
 
-    <!-- RIGHT: CHAT SECTION -->
-    <div id="chat-panel">
-        <h3 style="color:#0ff; margin:0 0 10px 0;">VAN COMMS</h3>
-
-        <div id="chat-log"></div>
-
-        <div id="chat-input">
-            <input id="messageBox" type="text" placeholder="Type a message..." />
-            <button onclick="sendMessage()">Send</button>
+  <div id="lobby-screen" class="screen lobby-screen hidden">
+    <div class="van-wrapper">
+      <div class="van-top-row">
+        <div>
+          <div class="van-wall-title">Case Files &amp; Chaos</div>
+          <div class="photo-grid">
+            <div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 01_35_48 PM_1764099378740.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_40_24 PM_1764191715699.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 06_58_04 PM_1764191759271.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div><div class="photo-card"><img src="assets/images/ChatGPT Image Nov 25, 2025, 07_27_30 PM_1764191734113.png" alt="Phasmophobia Broads art"><div class="sticky-label">Suspect</div></div>
+          </div>
         </div>
 
-        <button id="open-voice" onclick="openJitsi()">Open Voice Room</button>
+        <div class="avatar-card">
+          <div class="avatar-title">Current Hunter</div>
+          <div class="avatar-row">
+            <div id="avatarPreview" class="avatar-preview">
+              <span id="avatarInitials">JM</span>
+            </div>
+            <div class="avatar-meta">
+              <div id="avatarNameLabel">JadedMystery</div>
+              <div style="font-size:0.7rem;color:#6b7280;">This is how you'll appear in the van.</div>
+            </div>
+          </div>
+          <div class="avatar-upload">
+            Upload a profile picture (optional):
+            <input id="avatarFile" type="file" accept="image/*">
+          </div>
+        </div>
+      </div>
+
+      <div class="van-console">
+        <div class="console-header">
+          <div>
+            <div class="console-title">Investigation Lobby</div>
+            <div class="console-sub">Name your hunter, choose a room code, and get in the van.</div>
+          </div>
+          <div class="console-pill">Max 8 Players</div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <div class="field-label">Hunter Name</div>
+            <div class="input-shell">
+              <input id="playerName" type="text" maxlength="20" placeholder="JadedMystery">
+            </div>
+            <div class="helper">This name will appear in the van and in the call.</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Room Code</div>
+            <div class="input-shell">
+              <input id="roomCode" type="text" maxlength="12" placeholder="EX: DEMON1">
+            </div>
+            <div class="helper">Share this with friends so they join the same haunting.</div>
+          </div>
+        </div>
+
+        <div class="console-buttons">
+          <button id="createLobbyBtn" class="btn btn-primary" type="button">Create Lobby</button>
+          <button id="joinLobbyBtn" class="btn btn-secondary" type="button">Join Lobby</button>
+          <button id="randomCodeBtn" class="btn btn-ghost" type="button">Random Room Code</button>
+        </div>
+
+        <div class="helper">Tip: Whoever creates the lobby should stream from a stable device &amp; internet if possible.</div>
+      </div>
     </div>
+  </div>
 
-    <!-- FIREBASE -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
-        import {
-            getFirestore,
-            collection,
-            addDoc,
-            onSnapshot,
-            serverTimestamp,
-            query,
-            orderBy
-        } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+  <audio id="lobby-ambient" src="assets/audio/ambient.wav"></audio>
+  <audio id="ui-click" src="assets/audio/click.wav"></audio>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyB2WA7yotRlqNidwIgJcT19JNrK8ukMgs4",
-            authDomain: "phasmophobiabroads.firebaseapp.com",
-            projectId: "phasmophobiabroads",
-            storageBucket: "phasmophobiabroads.firebasestorage.app",
-            messagingSenderId: "503659624108",
-            appId: "1:503659624108:web:6e57fbc6bf36b0d5989109"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const room = urlParams.get("room") || "default";
-        const username = urlParams.get("name") || "Investigator";
-
-        const messagesRef = collection(db, "rooms", room, "messages");
-
-        async function sendMessage() {
-            const msg = messageBox.value.trim();
-            if (msg.length === 0) return;
-
-            await addDoc(messagesRef, {
-                sender: username,
-                text: msg,
-                timestamp: serverTimestamp()
-            });
-
-            messageBox.value = "";
-        }
-
-        const q = query(messagesRef, orderBy("timestamp"));
-        onSnapshot(q, (snapshot) => {
-            chatLog.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                const line = document.createElement("div");
-
-                line.innerHTML = `<span class="system">[${data.sender}]</span> ${data.text}`;
-                chatLog.appendChild(line);
-            });
-
-            chatLog.scrollTop = chatLog.scrollHeight;
-        });
-
-        function openJitsi() {
-            window.open("https://8x8.vc/phasmobroads/" + room, "_blank");
-        }
-    </script>
-
+  <script src="assets/js/lobby.js"></script>
 </body>
 </html>
