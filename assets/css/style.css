@@ -1,5 +1,4 @@
-body { background:#000; color:#0ff; font-family:Arial; }
-.van-grid { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:20px; padding:20px; }
-.van-monitor { background:#111; padding:10px; border:2px solid #0ff; }
-.van-chat { background:#111; padding:10px; border:2px solid #09f; display:flex; flex-direction:column; }
-#chatMessages { height:200px; overflow-y:auto; background:#000; margin-bottom:10px; padding:5px; }
+
+body{background:#000;color:#0ff;font-family:Arial;}
+.van-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:10px;}
+.monitor img{width:100%;border:2px solid #0ff;}
