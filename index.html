@@ -1,25 +1,29 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Lobby</title>
+<title>Phasmophobia Broads - Lobby</title>
 <link rel="stylesheet" href="assets/css/style.css">
-<script type="module" src="assets/js/lobby.js"></script>
 </head>
-<body>
-<h1>PHASMOPHOBIA BROADS</h1>
-<div class="lobby-controls">
-<input id="username" placeholder="Hunter Name">
-<input id="roomcode" placeholder="Room Code">
-<button id="joinBtn">JOIN</button>
+<body class="lobby">
+
+<div class="lobby-container">
+    <h1 class="title">PHASMOPHOBIA BROADS</h1>
+
+    <div class="lobby-controls">
+        <input id="username" class="input" placeholder="Hunter Name">
+        <input id="roomcode" class="input" placeholder="Room Code">
+        <button id="joinBtn" class="button">JOIN VAN</button>
+    </div>
 </div>
+
 <script>
-document.getElementById("joinBtn").onclick=function(){
- let r=document.getElementById("roomcode").value||"BROADS";
- let n=document.getElementById("username").value||"Hunter";
- window.location.href="chat.html?room="+r+"&name="+n;
+document.getElementById("joinBtn").onclick = () => {
+  const name = document.getElementById("username").value || "Hunter";
+  const room = document.getElementById("roomcode").value || "BROADS";
+  window.location.href = "chat.html?room=" + room + "&name=" + name;
 };
 </script>
+
 </body>
 </html>
