@@ -879,3 +879,43 @@ body {
 
 /* layout fix */
 .van-layout{display:grid!important;grid-template-columns:260px auto!important;width:100%!important;}
+
+
+/* === FINAL WIDE LAYOUT REBUILD === */
+.van-scene {
+  display: grid !important;
+  grid-template-columns: 260px minmax(0, 1fr) !important;
+  grid-auto-rows: auto;
+  gap: 1.4rem !important;
+  width: 100% !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  align-items: flex-start !important;
+}
+
+/* Left pinned-evidence column stays narrow */
+.van-wall-column {
+  grid-column: 1;
+  grid-row: 1 / span 3;
+  width: 260px;
+  max-width: 260px;
+}
+
+/* Monitor, footer, and chat all live in the wide right column */
+.van-monitor-column,
+.monitor-footer,
+.van-chat {
+  grid-column: 2;
+}
+
+/* Let monitor + chat breathe horizontally */
+.van-monitor-column,
+.van-chat {
+  width: 100%;
+  min-width: 520px;
+}
+
+/* Make sure the ghost help panel floats above everything */
+#ghostHelpPanel {
+  z-index: 9999;
+}
