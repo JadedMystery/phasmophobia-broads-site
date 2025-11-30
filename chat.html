@@ -1,1 +1,22 @@
-<html><body><h1>Chat Placeholder</h1></body></html>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Phasmo Van</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<script defer src="assets/js/chat.js"></script>
+</head>
+<body class="van-body">
+    <div class="van-container">
+        <div class="crt camera-feed">Camera Feed</div>
+        <div class="crt activity-monitor">Activity</div>
+        <div class="crt sanity-monitor">Sanity</div>
+
+        <div class="chat-panel">
+            <div id="messages"></div>
+            <input id="chatInput" placeholder="Type...">
+            <button onclick="sendMsg()">Send</button>
+        </div>
+    </div>
+</body>
+</html>
